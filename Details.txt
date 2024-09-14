@@ -1,0 +1,100 @@
+
+Topics:
+
+  1. Securing the secrets in safer place, 
+    
+    Storing secrets using .env like dburl & passwords
+
+      Package: dotenv ( for loading the variables from .env into process.env )
+      
+  2. Code/Folder Structure:
+    Separate the Core Business Logic, APIs and DB Communication:
+
+    Grouping of apis with /<path-name>
+    
+    Folder structure:
+      /utils ( Common Utilities )
+        utils.js
+      /db-util
+        models.js --> models for the entity used in app
+        db-connection.js --> object/function for connecting with the DB
+      /routes
+        /movies
+          movies-logic.js --> Movie related business Logics ( DB Connection )
+            getAllMovies
+            insertMovie(movieDetails)
+          movies.js --> movies related routes
+            / --> retrun the result getAllMovies
+            / --> insertMovie(req.body);
+        /users
+          users-logic.js --> User related business Logics
+          users.js --> User related routes
+        /theaters
+          theaters-logic.js --> Theaters related business Logics
+          theaters.js --> Theaters related routes
+        /booking ---> CRUD on theaters
+          booking-logic.js --> Booking related business Logics
+          booking.js --> Booking related routes
+      index.js/server.js --> Server related codes & router in middleware
+      .env ( has to be ignored for Git )
+      .gitignore
+      package.json
+
+  3. Authentication & Authorization:
+
+    Authentication:
+      Verification to enter the application, who Your
+    
+    Authorization:
+      What you can do as an authenticated user
+
+    Authentication Flow:
+
+      Process of confirming the identity of the user
+
+      technique to know who You are. 
+        if proper user of the application --> Let user use our application
+        else not an user of the application --> do not let the user use our application
+
+      Storing the Password:
+        bcrypt - hash the password field using bcrypt.hash
+
+      User Authentication:
+        FE:
+          /register - Done
+          /login - Done
+        
+        BE:
+          /users - POST (  user Registration is Done )
+            
+          Send an mail to the email that was used while registration - ToDo
+
+          /users/login - POST - ToDo
+
+Task:
+  please revise today's topics - Try to implement Registration Flow discussed in the session
+  Create a new separate google account for development related tasks
+    google account with app_key
+      1. Manage Google Account
+      2. Security
+      3. 2 Step verification
+      4. App passwords
+      5. Create a new password with name
+
+Next Session:
+  Mailing a registered user:
+    STMP module nodemailer
+  Email verification
+  complete authorization
+    Authorization:
+      1. Login API will return a token & role, use that token as a identifier 
+      for the login status,
+      2. use local storage to store the token
+        then restrict the user access with role
+    Authorization Flow:
+
+    Application flow after successfull login:
+      1. use the token from the login response
+      2. APIs except /login, /register, read movies API should contain the request header 
+         authorization/acesstoken: < jwt-token >
+      3. backend will use this token to verify the roles or access or permission of the user in backend
